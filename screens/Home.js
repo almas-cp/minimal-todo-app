@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Platform, StatusBar, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import { useSelector, useDispatch} from 'react-redux';
 import { hideComplitedReducer, setTodosReducer } from '../redux/todosSlice';
 import ListTodos from '../components/ListTodos';
 import { useGetTodos } from '../hooks/useGetTodos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
+// import * as Notifications from 'expo-notifications';
 import { useNavigation } from '@react-navigation/native';
-import * as Device from 'expo-device';
+// import * as Device from 'expo-device';
 import moment from 'moment';
 
+// Commenting out notifications for Expo Go compatibility
+/*
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
@@ -17,6 +19,7 @@ Notifications.setNotificationHandler({
         shouldSetBadge: false,
     }),
 })
+*/
 
 export default function Home() {
 
@@ -29,7 +32,8 @@ export default function Home() {
 
 
     useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+        // Disabling notifications for now
+        // registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
         checkFirstLaunch();
     }, []);
 
@@ -60,6 +64,9 @@ export default function Home() {
     }
 
     const registerForPushNotificationsAsync = async () => {
+        // Commenting out for Expo Go compatibility
+        return null;
+        /*
         let token;
         if (Device.isDevice) {
           const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -86,6 +93,7 @@ export default function Home() {
           });
         }
         return token;
+        */
     }
 
     const todayTodos = todos.filter(todo => moment(todo.hour).isSame(moment(), 'day'));
@@ -93,7 +101,7 @@ export default function Home() {
 
     return (
         todos.length > 0 ?
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             {/* <Image 
                 source={{ uri: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-photos-of-cats-cleaning-1593202999.jpg'}} 
                 style={styles.pic} /> */}
@@ -127,7 +135,7 @@ export default function Home() {
                 </View>
             }
             <StatusBar style='auto' />
-        </ScrollView>
+        </View>
         : <View style={styles.container}>
             {/* <Image 
                 source={{ uri: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cute-photos-of-cats-cleaning-1593202999.jpg'}} 

@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTodoReducer } from '../redux/todosSlice';
-import * as Notifications from 'expo-notifications';
+// import * as Notifications from 'expo-notifications';
 
 export default function AddTodo() {
 
@@ -19,6 +19,12 @@ export default function AddTodo() {
     const dispatch = useDispatch();
 
     const addTodo = async () => {
+        // Validate that name is not empty
+        if(!name || name.trim() === '') {
+            alert('Please enter a task name');
+            return;
+        }
+        
         const newTodo = {
             id: Math.floor(Math.random() * 1000000),
             text: name,
@@ -30,9 +36,10 @@ export default function AddTodo() {
             await AsyncStorage.setItem('Todos', JSON.stringify([...listTodos, newTodo]));
             dispatch(addTodoReducer(newTodo));
             console.log('Todo saved correctly');
-            if(withAlert){
-                await scheduleTodoNotification(newTodo);
-            }
+            // Disabling notifications for Expo Go compatibility
+            // if(withAlert){
+            //     await scheduleTodoNotification(newTodo);
+            // }
             navigation.goBack();
         }
         catch (e) {
@@ -41,6 +48,9 @@ export default function AddTodo() {
     };
 
     const scheduleTodoNotification = async (todo) => {
+        // Commenting out for Expo Go compatibility
+        console.log('Notifications disabled in Expo Go');
+        /*
         // set trigger time to todo.hour if todo.isToday === true else set trigger time to todo.hour + 24 hours
         // const trigger = todo.isToday ? todo.hour : new Date(todo.hour).getTime() + 24 * 60 * 60 * 1000;
         const trigger = new Date(todo.hour);
@@ -56,6 +66,7 @@ export default function AddTodo() {
         } catch (e) {
             alert('The notification failed to schedule, make sure the hour is valid');
         }
+        */
     };
 
     return (
